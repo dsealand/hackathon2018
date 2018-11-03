@@ -15,25 +15,15 @@
 """
 Sample App Engine application demonstrating how to connect to Google Cloud SQL
 using App Engine's native unix socket or using TCP when running locally.
-
 For more information, see the README.md.
 """
 
-# [START gae_python_mysql_app]
+# [START all]
 import os
-import urllib
-
-#from google.appengine.api import users
-#from google.appengine.ext import nbd
 
 import MySQLdb
 import webapp2
-import jinja2
 
-# JINJA_ENVIRONMENT = jinja2.Environment(
-#     loader=jinja2.FileSystemLoader(os.path.dirname(_file_)),
-#     extensions=['jinja2.ext.autoescape'],
-#     autoescape=True)
 
 # These environment variables are configured in app.yaml.
 CLOUDSQL_CONNECTION_NAME = os.environ.get('CLOUDSQL_CONNECTION_NAME')
@@ -74,36 +64,19 @@ class MainPage(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/plain'
 
         db = connect_to_cloudsql()
-
-        databaseName = 'clients'
-        tableName1 = 'c_1'
-        tableName2 = 'c_2'
-
         cursor = db.cursor()
         cursor.execute('SHOW VARIABLES')
-        cursor.execute('USE ' + databaseName)
-        cursor.execute('SELECT * FROM ' + tableName1)
-        cursor.execute('SELECT * FROM ' + tableName2)
+
+        cursor.execute('USE newDatabase')
+        cursor.execute('SHOW tables')
+        cursor.execute('SELECT * FROM entries')
 
         for r in cursor.fetchall():
-           self.response.write('{}\n'.format(r))
-
-
-        # template_values = {
-        #     'user': user,
-        #     'greetings': greetings,
-        #     'guestbook_name': urllib.quote_plus(guestbook_name),
-        #     'url': url,
-        #     'url_linktext': url_linktext,
-        # }
-
-        # template = JINJA_ENVIRONMENT.get_template('index.html')
-        # self.response.write(template.render(template_values))
-
+            self.response.write('{}\n'.format(r))
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
 ], debug=True)
 
-# [END gae_python_mysql_app]
+# [END all]
