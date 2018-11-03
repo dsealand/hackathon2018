@@ -1,0 +1,23 @@
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /
+  script: main.app
+
+libraries:
+- name: MySQLdb
+  version: "latest"
+- name: webapp2
+  version: 2.5.2
+- name: jinja2
+  version: 2.6
+
+
+# [START gae_python_mysql_env]
+env_variables:
+    CLOUDSQL_CONNECTION_NAME: hackathon2018-221404:us-west1:myinstance
+    CLOUDSQL_USER: root
+    CLOUDSQL_PASSWORD: password
+# [END gae_python_mysql_env]
